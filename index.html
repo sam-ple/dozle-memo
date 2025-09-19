@@ -969,62 +969,70 @@
 "20200101","【ポケモン剣盾】開運！『ゆびをふる』で2020年の運勢を占います【奪ったポケモンpart5】【ドズぼん】","https://youtu.be/Kt-CVkUqzcI"
 "20200101","【クラロワ】2020年の最初の動画で最多トロフィーを更新します！昇格戦でまさかのレベル14 wwwwww","https://youtu.be/jEaUBKraSm8"`;
 
-    Papa.parse(csvData, {
-      header: true,
-      skipEmptyLines: true,
-      quotes: true,
-      complete: function(results) {
-        const data = results.data;
-        const headers = results.meta.fields;
+  Papa.parse(csvData, {
+    header: true,
+    skipEmptyLines: true,
+    quotes: true,
+    complete: function(results) {
+      const data = results.data;
+      const headers = results.meta.fields;
 
-        // --- ヘッダー生成 ---
-        let thead = "<tr>";
-        headers.forEach(h => thead += `<th>${h}</th>`);
-        thead += "</tr>";
-        document.querySelector("#myTable thead").innerHTML = thead;
+      // --- ヘッダー生成 ---
+      let thead = "<tr>";
+      headers.forEach(h => thead += `<th>${h}</th>`);
+      thead += "</tr>";
+      document.querySelector("#myTable thead").innerHTML = thead;
 
-        // --- tbody生成 ---
-        let tbody = "";
-        data.forEach(row => {
-          tbody += "<tr>";
-          headers.forEach(h => {
-            let cell = row[h] || "";
+      // --- tbody生成 ---
+      let tbody = "";
+      data.forEach(row => {
+        tbody += "<tr>";
+        headers.forEach(h => {
+          let cell = row[h] || "";
 
-            // タイトル列をURLでリンク化
-            if(h === "タイトル" && row["URL"]) {
-              cell = `<a href="${row["URL"]}" target="_blank" rel="noopener">${cell}</a>`;
-            }
-
-            tbody += `<td>${cell}</td>`;
-          });
-          tbody += "</tr>";
-        });
-        document.querySelector("#myTable tbody").innerHTML = tbody;
-
-        // --- DataTables初期化 ---
-        $('#myTable').DataTable({
-          pageLength: 50,
-          lengthMenu: [50, 100, 250, 500, 1000],
-          order: [],
-          columnDefs: [
-            { targets: 2, visible: false } // URL列を非表示（インデックス2）
-          ],
-          language: {
-            search: "検索:",
-            lengthMenu: "_MENU_ 件表示",
-            info: " _START_ - _END_ / _TOTAL_ 件",
-            infoEmpty: "0 件",
-            zeroRecords: "該当するデータが見つかりません",
-            paginate: {
-              first: "最初",
-              previous: "前",
-              next: "次",
-              last: "最後"
-            }
+          // 公開日を YYYY/MM/DD に変換
+          if(h === "公開日" && cell.match(/^\d{8}$/)) {
+            const y = cell.substring(0,4);
+            const m = cell.substring(4,6);
+            const d = cell.substring(6,8);
+            cell = `${y}/${m}/${d}`;
           }
+
+          // タイトル列をURLでリンク化
+          if(h === "タイトル" && row["URL"]) {
+            cell = `<a href="${row["URL"]}" target="_blank" rel="noopener">${cell}</a>`;
+          }
+
+          tbody += `<td>${cell}</td>`;
         });
-      }
-    });
-  </script>
+        tbody += "</tr>";
+      });
+      document.querySelector("#myTable tbody").innerHTML = tbody;
+
+      // --- DataTables初期化 ---
+      $('#myTable').DataTable({
+        pageLength: 50,
+        lengthMenu: [50, 100, 250, 500, 1000],
+        order: [],
+        columnDefs: [
+          { targets: 2, visible: false } // URL列を非表示（インデックス2）
+        ],
+        language: {
+          search: "検索:",
+          lengthMenu: "_MENU_ 件表示",
+          info: " _START_ - _END_ / _TOTAL_ 件",
+          infoEmpty: "0 件",
+          zeroRecords: "該当するデータが見つかりません",
+          paginate: {
+            first: "最初",
+            previous: "前",
+            next: "次",
+            last: "最後"
+          }
+        }
+      });
+    }
+  });
+</script>
 </body>
 </html>
