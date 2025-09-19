@@ -1,2 +1,4 @@
 - yt-dlp -j --max-downloads 2000 "https://www.youtube.com/@xxxx/videos" | jq -r ". | \"\(.upload_date)\t\(.title)\thttps://youtu.be/\(.id)\"" > video_list.txt
 - yt-dlp -j --max-downloads 2000 "https://www.youtube.com/@dozle/videos" --sleep-interval 0.5 --retries 3 --skip-download | jq -r ". | \"\(.upload_date)\t\(.title)\thttps://youtu.be/\(.id)\"" > video_list.txt
+- yt-dlp -j "https://www.youtube.com/@dozle/videos" --dateafter 20230101 --datebefore 20231231 --skip-download --retries 3 --sleep-interval 0.5 | jq -r ". | \"\(.upload_date)\t\(.title)\thttps://youtu.be/\(.id)\"" > video_list2.txt
+- yt-dlp -j "https://www.youtube.com/@dozle/videos" --dateafter 20250101 --datebefore 20250901 --skip-download --retries 3 --sleep-interval 0.5 --ignore-errors | jq -r ". | \"\(.upload_date)\t\(.title)\thttps://youtu.be/\(.id)\"" > video_list2.txt
