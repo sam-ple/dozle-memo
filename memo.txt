@@ -1,0 +1,2 @@
+- yt-dlp -j --max-downloads 2000 "https://www.youtube.com/@xxxx/videos" | jq -r ". | \"\(.upload_date)\t\(.title)\thttps://youtu.be/\(.id)\"" > video_list.txt
+- yt-dlp -j --max-downloads 2000 "https://www.youtube.com/@dozle/videos" --sleep-interval 0.5 --retries 3 --skip-download | jq -r ". | \"\(.upload_date)\t\(.title)\thttps://youtu.be/\(.id)\"" > video_list.txt
